@@ -3,7 +3,7 @@ version: "3.8"
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql_db
+    container_name: supplier_mysql_db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -11,14 +11,27 @@ services:
       MYSQL_USER: usuario
       MYSQL_PASSWORD: senha
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
       - supplier_network
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: supplier_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - supplier_network
+
 volumes:
   mysql_data:
+  rabbitmq-data:
 
 networks:
   supplier_network:
+    driver: bridge
